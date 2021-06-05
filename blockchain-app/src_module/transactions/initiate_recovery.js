@@ -34,6 +34,15 @@ class InitiateRecoveryAsset extends BaseAsset {
             address: rescuer.address,
         });
 
+        if (deposit > rescuerBalance) {
+            throw new Error("Rescuer does not enough balance to deposit for recovery process");
+        }
+        // deduct the balance from rescuer and update rescuer account
+        await reducerHandler.invoke('token:debit', {
+            address: rescuer.address, 
+            amount: deposit,
+        });
+
         // update lost account address to active recovery
         lostAccount.srs.status.active = true;
         lostAccount.srs.status.rescuer = rescuer.address;
