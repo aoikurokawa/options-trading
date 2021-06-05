@@ -1,38 +1,37 @@
 const { transactions, cryptography } = require("@liskhq/lisk-client");
-const { tokenTransferSchema, } = require("../schemas");
-const { DEFAULT_FEE, TOKEN_MODULE_ID, TOKEN_TRANSFER_ASSET_ID } = require("../constants");
+const { vouchRecoverySchema } = require('../schemas');
+const { SRS_VOUCH_ASSET_ID, SRS_MODULE_ID, DEFAULT_FEE } = require('../constants');
 
-const transferToken = (
+const vouchRecovery = (
     codec,
     channel,
     nodeInfo,
 ) => async (req, res) => {
     try {
-        const { passphrase, amount, recipientAddress, data, fee } = req.body;
+        const { passphrase, lostAccount, rescuer, fee } = req.body;
         const asset = {
-            recipientAddress: Buffer.from(recipientAddress, 'hex'), 
-            amount: BigInt(amount), 
-            data,
+            lostAccount: Buffer.from(lostAccount, 'hex'),
+            rescuer: Buffer.from(rescuer, 'hex'),
         };
 
-        const {publicKey} = cryptography.getPrivateAndPublicKeyFromPassphrase(passphrase);
+        const { publicKey } = cryptography.getPrivateAndPublicKeyFromPassphrase(passphrase);
         const address = cryptography.getAddressFromPassphrase(passphrase);
         const account = await channel.invoke('app:getAccount', {
-            address
+            address,
         });
-        const {sequence: {nonce}} = codec.decodeAccount(account);
+        const { sequence: { nonce } } = codec.decodeAccount(account);
 
         const {id, ...tx} = transactions.signTransaction(
-            tokenTransferSchema, 
+            vouchRecoverySchema, 
             {
-                moduleID: TOKEN_MODULE_ID, 
-                assetID: TOKEN_TRANSFER_ASSET_ID, 
+                moduleID: SRS_MODULE_ID, 
+                assetID: SRS_VOUCH_ASSET_ID, 
                 nonce: BigInt(nonce), 
-                fee: fee || DEFAULT_FEE,
+                fee: fee || DEFAULT_FEE, 
                 senderPublicKey: publicKey, 
-                asset,
+                asset
             },
-            Buffer.from(nodeInfo.networkIdentifier, 'hex'), 
+            Buffer.from(nodeInfo.networkIdentifier, 'hex'),
             passphrase,
         );
         const encodedTransaction = codec.encodeTransaction(tx);
@@ -41,7 +40,6 @@ const transferToken = (
         });
 
         res.status(200).json({data: result, meta: {}});
-
     } catch (err) {
         res.status(409).json({
             errors: [{message: err.message}],
@@ -50,6 +48,8 @@ const transferToken = (
 };
 
 module.exports = {
-    transferToken,
+    vouchRecovery,
 };
+
+
 
