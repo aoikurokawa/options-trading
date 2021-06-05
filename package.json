@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@liskhq/lisk-client": "^5.1.0"
+  }
+}
