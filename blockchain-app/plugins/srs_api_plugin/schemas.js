@@ -116,7 +116,7 @@ const vouchRecoverySchema = {
 const claimRecoverySchema = {
     $id: 'srs/recovery/claim', 
     type: 'object', 
-    required: ['totalAccount'], 
+    required: ['lostAccount'], 
     properties: {
         lostAccount: {
             dataType: 'bytes', 

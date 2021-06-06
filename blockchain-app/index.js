@@ -60,5 +60,5 @@ app
     .run()
     .then(() => app.logger.info("SRS Blockchain running...."))
     .catch(() => {
-        console.error("Faced error in application..", error);
+        console.error();
     });

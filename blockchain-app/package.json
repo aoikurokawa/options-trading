@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Aoi",
   "license": "ISC",
   "dependencies": {
     "lisk-sdk": "^5.1.0"
