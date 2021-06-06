@@ -24,45 +24,63 @@ const createRecoverySchema = {
 const initiateRecoverySchema = {
     $id: 'srs/recovery/initiate',
     type: 'object',
-    required: ['friends', 'recoveryThreshold', 'delayPeriod'],
+    required: ['lostAccount'], 
     properties: {
-        friends: {
-            type: 'array',
+        lostAccount: {
+            dataType: 'bytes', 
             fieldNumber: 1,
-            items: {
-                dataType: 'bytes',
-            },
-        },
-        recoveryThreshold: {
-            dataType: 'uint32',
-            fieldNumber: 2,
-        },
-        delayPeriod: {
-            dataType: 'uint32',
-            fieldNumber: 3,
         },
     },
 };
 
+const vouchRecoverySchema = {
+    $id: 'srs/recovery/vouch',
+    type: 'object',
+    required: ['lostAccount', 'rescuer'], 
+    properties: {
+        rescuer: {
+            dataType: 'bytes', 
+            fieldNumber: 1
+        },
+        lostAccount: {
+            dataType: 'bytes', 
+            fieldNumber: 2,
+        },
+    },
+};
+
+const claimRecoverySchema = {
+    $id: 'srs/recovery/claim',
+    type: 'object',
+    required: ['lostAccount'], 
+    properties: {
+        lostAccount: {
+            dataType: 'bytes', 
+            fieldNumber: 1,
+        },
+    },
+}
+
+const closeRecoverySchema = {
+    $id: 'srs/recovery/close',
+    type: 'object',
+    required: ['rescuer'], 
+    properties: {
+        rescuer: {
+            dataType: 'bytes', 
+            fieldNumber: 1
+        },
+    },
+}
+
 const removeRecoverySchema = {
     $id: 'srs/recovery/remove',
     type: 'object',
-    required: ['friends', 'recoveryThreshold', 'delayPeriod'],
+    required: ['lostAccount'], 
     properties: {
-        friends: {
-            type: 'array',
+        lostAccount: {
+            dataType: 'bytes', 
             fieldNumber: 1,
-            items: {
-                dataType: 'bytes',
-            },
-        },
-        recoveryThreshold: {
-            dataType: 'uint32',
-            fieldNumber: 2,
-        },
-        delayPeriod: {
-            dataType: 'uint32',
-            fieldNumber: 3,
         },
     },
 };
@@ -95,7 +113,7 @@ const SRSAccountSchema = {
                 deposit: {
                     dataType: 'uint64',
                     fieldNumber: 4,
-                },
+                }
             },
             default: {
                 friends: [],
@@ -120,7 +138,7 @@ const SRSAccountSchema = {
                     fieldNumber: 3,
                 },
                 vouchList: {
-                    dataType: 'array',
+                    type: 'array',
                     fieldNumber: 4,
                     items: {
                         dataType: 'bytes',
@@ -149,5 +167,13 @@ const SRSAccountSchema = {
     },
 };
 
-module.exports = { createRecoverySchema, initiateRecoverySchema, removeRecoverySchema, SRSAccountSchema };
+module.exports = { 
+    createRecoverySchema, 
+    initiateRecoverySchema, 
+    vouchRecoverySchema,
+    claimRecoverySchema,
+    closeRecoverySchema,
+    removeRecoverySchema, 
+    SRSAccountSchema, 
+};
 
