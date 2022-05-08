@@ -1,6 +1,6 @@
 # Options Trading
 
 ## Resources
-- https://docs.psyoptions.io/
-- https://github.com/mithraiclabs/psyoptions
 
+- [PsyOptions Documentation](https://docs.psyoptions.io/)
+- [PsyOptions Github](https://github.com/mithraiclabs/psyoptions)
