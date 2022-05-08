@@ -20,3 +20,7 @@ overflow-checks = true
 
 [dependencies]
 anchor-lang = "0.24.2"
+anchor-spl = { version = "0.24.2", features = ["dex"] }
+solana-program = "1.9.13"
+spl-token = { version = "3.2.0", features = ["no-entrypoint"] }
+psyfi-serum-dex-permissioned = { version = "0.5.6" }
