@@ -1,7 +1,9 @@
+use solana_program::program_pack::Pack;
 use anchor_lang::{prelude::*, Key};
 use crate::{errors, fees};
 use crate::state::option_market::{OptionMarket};
 use anchor_spl::token::{Mint, Token, TokenAccount};
+use spl_token::state::Account as SPLTokenAccount;
 
 #[derive(Accounts)]
 #[instruction(
@@ -106,10 +108,38 @@ pub fn handler(
         return Err(errors::ErrorCode::QuoteOrUnderlyingAmountCannotBe0.into());
     }
 
-    // let fee_accounts = validate_fee_accounts(
+    let fee_accounts = validate_fee_accounts(
+        &ctx.remaining_accounts,
+        &ctx.accounts.underlying_asset_mint.key(),
+        &ctx.accounts.quote_asset_mint.key(),
+        underlying_amount_per_contract,
+        quote_amount_per_contract,
+    )?;
 
-    // )
+    // write the data to the OptionMarket account
+    let option_market = &mut ctx.accounts.option_market;
+    option_market.option_mint = *ctx.accounts.writer_token_mint.to_account_info().key;
+    option_market.writer_token_mint = *ctx.accounts.writer_token_mint.to_account_info().key;
+    option_market.underlying_asset_mint = *ctx.accounts.underlying_asset_mint.to_account_info().key;
+    option_market.quote_asset_mint = *ctx.accounts.quote_asset_mint.to_account_info().key;
+    option_market.underlying_amount_per_contract = underlying_amount_per_contract;
+    option_market.quote_amount_per_contract = quote_amount_per_contract;
+    option_market.expiration_unix_timestamp = expiration_unix_timestamp;
+    option_market.underlying_asset_pool = *ctx.accounts.underlying_asset_pool.to_account_info().key;
+    option_market.quote_asset_pool = *ctx.accounts.quote_asset_pool.to_account_info().key;
+    option_market.mint_fee_account = fee_accounts.mint_fee_key;
+    option_market.exercise_fee_account = fee_accounts.exercise_fee_key;
+    option_market.expired = false;
 
+    match ctx.bumps.get("option_market") {
+        Some(bump) => {
+            option_market.bump_seed = *bump;
+        }
+        None => {
+            msg!("Wrong bump key. Available keys are {:?}", ctx.bumps.keys());
+            panic!("Wrong bump key")
+        }
+    }
 
     Ok(())
 }
@@ -132,11 +162,43 @@ fn validate_fee_accounts<'info> (
         exercise_fee_key: fees::fee_owner_key::ID,
     };
 
+    // if the mint fee account is required, check that it exists and has the proper owner
+    if fees::fee_amount(underlying_amount_per_contract) > 0 {
+        let mint_fee_recipient = next_account_info(account_info_iter)?;
+        if mint_fee_recipient.owner != &spl_token::ID {
+            return Err(errors::ErrorCode::ExpectedSPLTokenProgramId.into());
+        }
+        let mint_fee_account = SPLTokenAccount::unpack_from_slice(&mint_fee_recipient.try_borrow_data()?)?;
+        if mint_fee_account.owner != fees::fee_owner_key::ID {
+            return Err(errors::ErrorCode::MintFeeMustBeOwnedByFeeOwner.into());
+        }
+        // Check that the mint fee recipient account's mint is also the underlying mint
+        if mint_fee_account.mint != *underlying_asset_mint {
+            return Err(errors::ErrorCode::MintFeeTokenMustMatchUnderlyingAsset.into());
+        }
 
+        fee_accounts.mint_fee_key = *mint_fee_recipient.key;
+    }
 
+    // if the exercise fee account is required, check that it exists and has the proper owner
+    if fees::fee_amount(quote_amount_per_contract) > 0 {
+        let exercise_fee_recipient = next_account_info(account_info_iter)?;
+        if exercise_fee_recipient.owner != &spl_token::ID {
+            return Err(errors::ErrorCode::ExpectedSPLTokenProgramId.into());
+        }
+        let exercise_fee_account = SPLTokenAccount::unpack_from_slice(&exercise_fee_recipient.try_borrow_data()?)?;
+        if exercise_fee_account.owner != fees::fee_owner_key::ID {
+            return Err(errors::ErrorCode::ExerciseFeeMustBeOwnedByFeeOwner.into());
+        }
+        // check that the exercise fee recipient account's mint is also the quote mint
+        if exercise_fee_account.mint != *quote_asset_mint {
+            return Err(errors::ErrorCode::ExerciseFeeTokenMustMatchQuoteAsset.into());
+        }
 
+        fee_accounts.exercise_fee_key = *exercise_fee_recipient.key;
+    }
 
-Ok(fee_accounts)
+    Ok(fee_accounts)
 
 }
 
