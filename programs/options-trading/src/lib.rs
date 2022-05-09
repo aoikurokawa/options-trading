@@ -27,4 +27,19 @@ pub mod options_trading {
             expiration_unix_timestamp,
         )
     }
+
+    #[access_control(MintOption::unexpired_market(&ctx) MintOption::accounts(&ctx) validate_size(size))]
+    pub fn mint_option<'a, 'b, 'c, 'info>(
+        ctx: Context<'a, 'b, 'c, 'info, MintOption<'info>>,
+        size: u64,
+    ) -> Result<()> {
+        instructions::mint_option::helper(ctx, size)
+    }
+}
+
+fn validate_size(size: u64) -> Result<()> {
+    if size <= 0 {
+        return Err(errors::ErrorCode::SizeCantBeLessThanEqZero.into());
+    }
+    Ok(())
 }
