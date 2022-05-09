@@ -4,7 +4,7 @@ mod close_post_exp;
 mod exercise_option;
 mod exercise_option_v2;
 // mod init_serum_market;
-mod initialize_market;
+pub mod initialize_market;
 mod mint_option;
 mod mint_option_v2;
 mod init_serum_market;

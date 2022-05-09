@@ -5,7 +5,7 @@ use anchor_spl::token::{Mint, Token, TokenAccount};
 // use solana_program::{program_error::ProgramError, system_program};
 
 #[derive(Accounts)]
-#[instruction(market_space: u64, vault_signer_nonce: u64, coin_lost_size: u64, pc_lot_size: u64, pc_dust_threshold: u64)]
+#[instruction(market_space: u64, vault_signer_nonce: u64, coin_lot_size: u64, pc_lot_size: u64, pc_dust_threshold: u64)]
 pub struct InitSerumMarket<'info> {
     #[account(mut)]
     pub user_authority: Signer<'info>,

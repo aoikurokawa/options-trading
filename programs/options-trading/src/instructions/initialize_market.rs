@@ -3,6 +3,13 @@ use crate::errors;
 use crate::state::option_market::{OptionMarket};
 use anchor_spl::token::{Mint, Token, TokenAccount};
 
+pub fn initialize_market(ctx: Context<InitializeMarket>, underlying_amount_per_contract: u64, quote_amount_per_contract: u64, expiration_unix_timestamp: i64, bump_seed: u8) -> Result<()> {
+
+
+
+    Ok(())
+}
+
 #[derive(Accounts)]
 #[instruction(
     underlying_amount_per_contract: u64,
@@ -69,7 +76,7 @@ pub struct InitializeMarket<'info> {
 }
 
 impl<'info> InitializeMarket<'info> {
-    fn accounts(ctx: &Context<InitializeMarket<'info>>) -> Result<()> {
+    pub fn accounts(ctx: &Context<InitializeMarket<'info>>) -> Result<()> {
         if ctx.accounts.option_mint.mint_authority.unwrap() != *ctx.accounts.option_market.to_account_info().key {
             return Err(errors::ErrorCode::OptionMarketMustBeMintAuthority.into());
         }
