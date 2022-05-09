@@ -97,7 +97,6 @@ pub fn handler(
     underlying_amount_per_contract: u64, 
     quote_amount_per_contract: u64, 
     expiration_unix_timestamp: i64, 
-    bump_seed: u8
 ) -> Result<()> {
     if expiration_unix_timestamp < ctx.accounts.clock.unix_timestamp {
         return Err(errors::ErrorCode::ExpirationIsInThePast.into());
