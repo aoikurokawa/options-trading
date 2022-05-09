@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 use psyfi_serum_dex_permissioned::{Context, MarketMiddleware};
 use solana_program::clock::Clock;
 
-use crate::{errors, OptionMarket};
+use crate::{errors, state::option_market::OptionMarket};
 
 pub struct Validation {
     pub market_auth_bump: u8,
