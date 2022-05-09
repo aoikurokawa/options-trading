@@ -28,7 +28,7 @@ pub struct MintOptionV2<'info> {
 }
 
 impl<'info> MintOptionV2<'info> {
-    fn accounts(ctx: &Context<MintOptionV2<'info>>) -> Result<()> {
+    pub fn accounts(ctx: &Context<MintOptionV2<'info>>) -> Result<()> {
         // Validate the underlying asset pool is the same as on the OptionMarket
         if *ctx.accounts.underlying_asset_pool.to_account_info().key
             != ctx.accounts.option_market.underlying_asset_pool
@@ -52,7 +52,7 @@ impl<'info> MintOptionV2<'info> {
         Ok(())
     }
 
-    fn unexpired_market(ctx: &Context<MintOptionV2<'info>>) -> Result<()> {
+    pub fn unexpired_market(ctx: &Context<MintOptionV2<'info>>) -> Result<()> {
         // Validate the market is not expired
         if ctx.accounts.option_market.expiration_unix_timestamp < Clock::get()?.unix_timestamp {
             return Err(errors::ErrorCode::OptionMarketExpiredCantMint.into());
