@@ -1,4 +1,5 @@
 pub mod errors;
+pub mod fees;
 pub mod serum_proxy;
 
 use anchor_lang::prelude::*;
@@ -38,7 +39,7 @@ pub struct OptionMarket {
     pub expiration_unix_timestamp: i64,
     /// Address for the luquidity pool that contains the underlying asset
     pub underlying_asset_pool: Pubkey,
-    /// Address for the liquidity pool that contains the quote asset when 
+    /// Address for the liquidity pool that contains the quote asset when
     /// options are exercised
     pub quote_asset_pool: Pubkey,
     /// The SPL Token account (from the Associated Token Program) that collects
