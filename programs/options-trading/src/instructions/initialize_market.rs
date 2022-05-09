@@ -1,14 +1,7 @@
 use anchor_lang::{prelude::*, Key};
-use crate::errors;
+use crate::{errors, fees};
 use crate::state::option_market::{OptionMarket};
 use anchor_spl::token::{Mint, Token, TokenAccount};
-
-pub fn initialize_market(ctx: Context<InitializeMarket>, underlying_amount_per_contract: u64, quote_amount_per_contract: u64, expiration_unix_timestamp: i64, bump_seed: u8) -> Result<()> {
-
-
-
-    Ok(())
-}
 
 #[derive(Accounts)]
 #[instruction(
@@ -96,3 +89,55 @@ impl<'info> InitializeMarket<'info> {
         Ok(())
     }
 }
+
+pub fn handler(
+    ctx: Context<InitializeMarket>, 
+    underlying_amount_per_contract: u64, 
+    quote_amount_per_contract: u64, 
+    expiration_unix_timestamp: i64, 
+    bump_seed: u8
+) -> Result<()> {
+    if expiration_unix_timestamp < ctx.accounts.clock.unix_timestamp {
+        return Err(errors::ErrorCode::ExpirationIsInThePast.into());
+    }
+
+    // check that underlying_amount_per_contract and quote_amount_per_contract are not 0
+    if underlying_amount_per_contract <= 0 || quote_amount_per_contract <= 0 {
+        return Err(errors::ErrorCode::QuoteOrUnderlyingAmountCannotBe0.into());
+    }
+
+    // let fee_accounts = validate_fee_accounts(
+
+    // )
+
+
+    Ok(())
+}
+
+struct FeeAccounts {
+    mint_fee_key: Pubkey,
+    exercise_fee_key: Pubkey,
+}
+
+fn validate_fee_accounts<'info> (
+    remaining_accounts: &[AccountInfo],
+    underlying_asset_mint: &Pubkey,
+    quote_asset_mint: &Pubkey,
+    underlying_amount_per_contract: u64,
+    quote_amount_per_contract: u64,
+) -> Result<FeeAccounts> {
+    let account_info_iter = &mut remaining_accounts.iter();
+    let mut fee_accounts = FeeAccounts {
+        mint_fee_key: fees::fee_owner_key::ID,
+        exercise_fee_key: fees::fee_owner_key::ID,
+    };
+
+
+
+
+
+Ok(fee_accounts)
+
+}
+
+

@@ -1,11 +1,11 @@
+use anchor_lang::prelude::*;
+use instructions::*;
+
 pub mod errors;
 pub mod fees;
 pub mod instructions;
 pub mod serum_proxy;
 pub mod state;
-
-use anchor_lang::prelude::*;
-use instructions::*;
 
 declare_id!("6xUQFHLbbfhayBwLBNSMfZfCmHNJJujWsS88qCtGfWdn");
 
