@@ -58,6 +58,6 @@ impl MarketMiddleware for Validation {
     }
 }
 
-// pub mod referral {
-//     solana_program::declare_id!()
-// }
+pub mod referral {
+    solana_program::declare_id!("6xUQFHLbbfhayBwLBNSMfZfCmHNJJujWsS88qCtGfWdn");
+}

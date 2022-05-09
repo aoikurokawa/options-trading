@@ -1,7 +1,7 @@
 [features]
 seeds = false
 [programs.localnet]
-options_trading = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+options_trading = "6xUQFHLbbfhayBwLBNSMfZfCmHNJJujWsS88qCtGfWdn"
 
 [registry]
 url = "https://anchor.projectserum.com"
