@@ -87,6 +87,6 @@ pub fn handler(ctx: Context<BurnWriterForQuote>, size: u64) -> Result<()> {
         .checked_mul(size)
         .unwrap();
     transfer(cpi_ctx, quote_transfer_amount)?;
-    
+
     Ok(())
 }
