@@ -83,7 +83,7 @@ impl<'info> InitSerumMarket<'info> {
     }
 }
 
-pub fn init_serum_market(
+pub fn handler(
     ctx: Context<InitSerumMarket>, 
     _market_space: u64, 
     vault_signer_nonce: u64, 

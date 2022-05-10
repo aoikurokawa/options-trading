@@ -74,6 +74,25 @@ pub mod options_trading {
     pub fn burn_writer_for_quote(ctx: Context<BurnWriterForQuote>, size: u64) -> Result<()> {
         instructions::burn_writer_for_quote::handler(ctx, size)
     }
+
+    #[access_control(InitSerumMarket::accounts(&ctx))]
+    pub fn init_serum_market(
+        ctx: Context<InitSerumMarket>, 
+        _market_space: u64, 
+        vault_signer_nonce: u64, 
+        coin_lot_size: u64, 
+        pc_lot_size: u64, 
+        pc_dust_threshold: u64
+    ) -> Result<()> {
+        instructions::init_serum_market::handler(
+            ctx, 
+            _market_space, 
+            vault_signer_nonce, 
+            coin_lot_size, 
+            pc_lot_size, 
+            pc_dust_threshold
+        )
+    }
 }
 
 fn validate_size(size: u64) -> Result<()> {
