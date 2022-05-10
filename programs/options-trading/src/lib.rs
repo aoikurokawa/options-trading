@@ -69,6 +69,11 @@ pub mod options_trading {
     pub fn close_option_position(ctx: Context<CloseOptionPosition>, size: u64) -> Result<()> {
         instructions::close_option_position::handler(ctx, size)
     }
+
+    #[access_control(BurnWriterForQuote::accounts(&ctx) BurnWriterForQuote::quotes_in_pool(&ctx, size))]
+    pub fn burn_writer_for_quote(ctx: Context<BurnWriterForQuote>, size: u64) -> Result<()> {
+        instructions::burn_writer_for_quote::handler(ctx, size)
+    }
 }
 
 fn validate_size(size: u64) -> Result<()> {
