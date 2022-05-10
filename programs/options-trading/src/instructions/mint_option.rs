@@ -88,7 +88,7 @@ impl<'info> MintOption<'info> {
     }
 }
 
-pub fn helper<'a, 'b, 'c, 'info>(
+pub fn handler<'a, 'b, 'c, 'info>(
     ctx: Context<'a, 'b, 'c, 'info, MintOption<'info>>,
     size: u64,
 ) -> Result<()> {

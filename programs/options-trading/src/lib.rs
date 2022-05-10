@@ -33,7 +33,7 @@ pub mod options_trading {
         ctx: Context<'a, 'b, 'c, 'info, MintOption<'info>>,
         size: u64,
     ) -> Result<()> {
-        instructions::mint_option::helper(ctx, size)
+        instructions::mint_option::handler(ctx, size)
     }
 }
 
