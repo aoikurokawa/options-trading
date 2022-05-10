@@ -64,6 +64,11 @@ pub mod options_trading {
     pub fn close_post_expiration(ctx: Context<ClosePostExp>, size: u64) -> Result<()> {
         instructions::close_post_exp::handler(ctx, size)
     }
+
+    #[access_control(CloseOptionPosition::accounts(&ctx))]
+    pub fn close_option_position(ctx: Context<CloseOptionPosition>, size: u64) -> Result<()> {
+        instructions::close_option_position::handler(ctx, size)
+    }
 }
 
 fn validate_size(size: u64) -> Result<()> {
