@@ -35,6 +35,14 @@ pub mod options_trading {
     ) -> Result<()> {
         instructions::mint_option::handler(ctx, size)
     }
+
+    #[access_control(MintOptionV2::unexpired_market(&ctx) MintOptionV2::accounts(&ctx) validate_size(size))]
+    pub fn mint_option_v2<'a, 'b, 'c, 'info>(
+        ctx: Context<'a, 'b, 'c, 'info, MintOptionV2<'info>>,
+        size: u64,
+    ) -> Result<()> {
+        instructions::mint_option_v2::handler(ctx, size)
+    }
 }
 
 fn validate_size(size: u64) -> Result<()> {
