@@ -66,7 +66,7 @@ impl<'info> ExerciseOptionV2<'info> {
     }
 }
 
-pub fn exercise_option_v2<'a, 'b, 'c, 'info>(
+pub fn handler<'a, 'b, 'c, 'info>(
     ctx: Context<'a, 'b, 'c, 'info, ExerciseOptionV2<'info>>,
     size: u64,
 ) -> Result<()> {
