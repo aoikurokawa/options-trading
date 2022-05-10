@@ -43,6 +43,14 @@ pub mod options_trading {
     ) -> Result<()> {
         instructions::mint_option_v2::handler(ctx, size)
     }
+
+    #[access_control(ExerciseOption::accounts(&ctx) ExerciseOption::unexpired_market(&ctx))]
+    pub fn exercise_option<'a, 'b, 'c, 'info>(
+        ctx: Context<'a, 'b, 'c, 'info, ExerciseOption<'info>>,
+        size: u64,
+    ) -> Result<()> {
+        instructions::exercise_option::handler(ctx, size)
+    }
 }
 
 fn validate_size(size: u64) -> Result<()> {
