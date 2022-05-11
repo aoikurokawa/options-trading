@@ -22,4 +22,4 @@ overflow-checks = true
 anchor-lang = "0.24.2"
 anchor-spl = "0.24.2"
 solana-program = "1.9.13"
-
+options-trading = {path = "../options-trading", features = ["cpi"]}
