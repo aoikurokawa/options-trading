@@ -99,4 +99,8 @@ pub mod cpi_examples {
     ) -> Result<()> {
         instructions::exercise::exercise(ctx, vault_authority_bump)
     }
+
+    pub fn init_mint_vault(_ctx: Context<InitMintVault>) -> Result<()> {
+        instructions::init_mint_vault::handler(_ctx)
+    }
 }
