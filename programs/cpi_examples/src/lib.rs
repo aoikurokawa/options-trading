@@ -103,4 +103,12 @@ pub mod cpi_examples {
     pub fn init_mint_vault(_ctx: Context<InitMintVault>) -> Result<()> {
         instructions::init_mint_vault::handler(_ctx)
     }
+
+    pub fn mint<'a, 'b, 'c, 'info>(
+        ctx: Context<'a, 'b, 'c, 'info, MintCtx<'info>>,
+        size: u64,
+        vault_authority_bump: u8,
+    ) -> Result<()> {
+        instructions::mint::handler(ctx, size, vault_authority_bump)
+    }
 }

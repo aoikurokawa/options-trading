@@ -35,7 +35,7 @@ pub struct MintCtx<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn mint<'a, 'b, 'c, 'info>(
+pub fn handler<'a, 'b, 'c, 'info>(
     ctx: Context<'a, 'b, 'c, 'info, MintCtx<'info>>,
     size: u64,
     vault_authority_bump: u8,
