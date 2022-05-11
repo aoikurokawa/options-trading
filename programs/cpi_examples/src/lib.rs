@@ -1,5 +1,9 @@
 use anchor_lang::prelude::*;
 
+pub mod errors;
+
+use errors as CpiExampleErrors;
+
 declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
 
 #[program]
