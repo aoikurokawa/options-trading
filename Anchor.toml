@@ -2,6 +2,7 @@
 seeds = false
 [programs.localnet]
 options_trading = "6xUQFHLbbfhayBwLBNSMfZfCmHNJJujWsS88qCtGfWdn"
+cpi_examples = "6xUQFHLbbfhayBwLBNSMfZfCmHNJJujWsS88qCtGfWdn"
 
 [registry]
 url = "https://anchor.projectserum.com"
