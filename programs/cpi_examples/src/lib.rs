@@ -111,4 +111,8 @@ pub mod cpi_examples {
     ) -> Result<()> {
         instructions::mint::handler(ctx, size, vault_authority_bump)
     }
+
+    pub fn init_new_order_vault(_ctx: Context<InitNewOrderVault>) -> Result<()> {
+        instructions::init_new_order_vault::handler(_ctx)
+    }
 }
