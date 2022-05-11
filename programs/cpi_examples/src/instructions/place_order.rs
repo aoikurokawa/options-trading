@@ -1,10 +1,12 @@
 use anchor_lang::prelude::*;
-use anchor_spl::dex::*;
-use anchor_spl::token::*;
 use anchor_spl::dex::serum_dex::{
     instruction::SelfTradeBehavior as SerumSelfTradeBehavior,
     matching::{OrderType as SerumOrderType, Side as SerumSide},
 };
+use anchor_spl::dex::*;
+use anchor_spl::token::*;
+
+use crate::errors as CpiExampleErrors;
 
 #[derive(Debug, AnchorSerialize, AnchorDeserialize)]
 pub enum SelfTradeBehavior {
@@ -102,6 +104,74 @@ pub fn place_order(
     limit: u16,
     max_native_pc_qty_including_fees: u64,
 ) -> Result<()> {
+    let cpi_program = ctx.accounts.option_trading_program.clone();
+    if ctx.accounts.open_orders.data_is_empty() {
+        solana_program::program::invoke(
+            &solana_program::system_instruction::transfer(
+                &ctx.accounts.user_authority.key,
+                &ctx.accounts.vault_authority.key,
+                23347760,
+            ),
+            &[
+                ctx.accounts.user_authority.to_account_info(),
+                ctx.accounts.vault_authority.to_account_info(),
+                ctx.accounts.system_program.to_account_info(),
+            ],
+        )?;
 
+        let mut ix = serum_dex::instruction::init_open_orders(
+            &ctx.accounts.dex_program.key,
+            ctx.accounts.open_orders.key,
+            ctx.accounts.vault_authority.key,
+            ctx.accounts.market.key,
+            Some(ctx.accounts.market_authority.key),
+        )
+        .map_err(|_x| CpiExampleErrors::ErrorCode::DexIxError)?;
+
+        ix.program_id = *cpi_program.key;
+        ix.accounts[0].pubkey = ctx.accounts.open_orders.key();
+        ix.accounts[4].pubkey = ctx.accounts.market_authority.key();
+        ix.accounts[4].is_signer = false;
+        ix.accounts[1].is_writable = true;
+        ix.accounts.insert(
+            0,
+            ctx.accounts.system_program.to_account_metas(Some(false))[0].clone(),
+        );
+        ix.accounts.insert(
+            0,
+            ctx.accounts.dex_program.to_account_metas(Some(false))[0].clone(),
+        );
+
+        ix.data.insert(0, open_order_bump_init);
+        ix.data.insert(0, open_order_bump);
+        ix.data.insert(0, 0 as u8);
+        ix.data.insert(0, 0 as u8);
+
+        ix.accounts.insert(
+            0,
+            ctx.accounts.dex_program.to_account_metas(Some(false))[0].clone(),
+        );
+
+        let vault_key = ctx.accounts.vault.key();
+        let vault_authority_seeds = &[
+            vault_key.as_ref(),
+            b"vaultAuthority",
+            &[vault_authority_bump],
+        ];
+        solana_program::program::invoke_signed(
+            &ix,
+            &[
+                ctx.accounts.option_trading_program.to_account_info(),
+                ctx.accounts.dex_program.to_account_info(),
+                ctx.accounts.open_orders.to_account_info(),
+                ctx.accounts.vault_authority.to_account_info(),
+                ctx.accounts.market.to_account_info(),
+                ctx.accounts.market_authority.to_account_info(),
+                ctx.accounts.system_program.to_account_info(),
+                ctx.accounts.rent.to_account_info(),
+            ],
+            &[vault_authority_seeds],
+        )?;
+    }
     Ok(())
 }
