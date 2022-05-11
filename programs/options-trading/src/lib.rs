@@ -20,12 +20,14 @@ pub mod options_trading {
         underlying_amount_per_contract: u64,
         quote_amount_per_contract: u64,
         expiration_unix_timestamp: i64,
+        bump_seed: u8,
     ) -> Result<()> {
         instructions::initialize_market::handler(
             ctx,
             underlying_amount_per_contract,
             quote_amount_per_contract,
             expiration_unix_timestamp,
+            bump_seed
         )
     }
 
