@@ -71,10 +71,36 @@ impl From<NewSide> for SerumSide {
 pub mod cpi_examples {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
+    pub fn initialize_option_market<'a, 'b, 'c, 'info>(
+        ctx: Context<InitOptionMarket>,
+    ) -> Result<()> {
         Ok(())
     }
 }
 
 #[derive(Accounts)]
-pub struct Initialize {}
+pub struct InitOptionMarket<'info> {
+    #[account(mut)]
+    pub user: Signer<'info>,
+    pub options_trading_program: AccountInfo<'info>,
+    pub underlying_asset_mint: Box<Account<'info, Mint>>,
+    pub quote_asset_mint: Box<Account<'info, Mint>>,
+
+    #[account(mut)]
+    pub option_mint: AccountInfo<'info>,
+    #[account(mut)]
+    pub writer_token_mint: AccountInfo<'info>,
+    #[account(mut)]
+    pub quote_asset_pool: AccountInfo<'info>,
+    #[account(mut)]
+    pub underlying_asset_pool: AccountInfo<'info>,
+    #[account(mut)]
+    pub option_market: AccountInfo<'info>,
+    pub fee_owner: AccountInfo<'info>,
+
+    pub token_program: Program<'info, Token>,
+    pub associated_token_program: AccountInfo<'info>,
+    pub rent: Sysvar<'info, Rent>,
+    pub system_program: Program<'info, System>,
+    pub clock: Sysvar<'info, Clock>,
+}
