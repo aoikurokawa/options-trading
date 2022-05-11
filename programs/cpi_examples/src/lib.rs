@@ -92,4 +92,11 @@ pub mod cpi_examples {
     pub fn initialize(ctx: Context<Initialize>, amount: u64) -> Result<()> {
         instructions::initialize::handler(ctx, amount)
     }
+
+    pub fn exercise<'a, 'b, 'c, 'info>(
+        ctx: Context<'a, 'b, 'c, 'info, Exercise<'info>>,
+        vault_authority_bump: u8,
+    ) -> Result<()> {
+        instructions::exercise::exercise(ctx, vault_authority_bump)
+    }
 }
