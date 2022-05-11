@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
 use instructions::*;
+use psyfi_serum_dex_permissioned::{MarketProxy, OpenOrdersPda, ReferralFees};
 
 pub mod errors;
 pub mod fees;
@@ -77,21 +78,29 @@ pub mod options_trading {
 
     #[access_control(InitSerumMarket::accounts(&ctx))]
     pub fn init_serum_market(
-        ctx: Context<InitSerumMarket>, 
-        _market_space: u64, 
-        vault_signer_nonce: u64, 
-        coin_lot_size: u64, 
-        pc_lot_size: u64, 
-        pc_dust_threshold: u64
+        ctx: Context<InitSerumMarket>,
+        _market_space: u64,
+        vault_signer_nonce: u64,
+        coin_lot_size: u64,
+        pc_lot_size: u64,
+        pc_dust_threshold: u64,
     ) -> Result<()> {
         instructions::init_serum_market::handler(
-            ctx, 
-            _market_space, 
-            vault_signer_nonce, 
-            coin_lot_size, 
-            pc_lot_size, 
-            pc_dust_threshold
+            ctx,
+            _market_space,
+            vault_signer_nonce,
+            coin_lot_size,
+            pc_lot_size,
+            pc_dust_threshold,
         )
+    }
+
+    pub fn entry(program_id: &Pubkey, accounts: &[AccountInfo], data: &[u8]) -> Result<()> {
+        MarketProxy::new()
+            .middleware(&mut serum_proxy::Validation::new())
+            .middleware(&mut ReferralFees::new(serum_proxy::referral::ID))
+            .middleware(&mut OpenOrdersPda::new())
+            .run(program_id, accounts, data)
     }
 }
 
