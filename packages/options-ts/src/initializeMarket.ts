@@ -1,14 +1,6 @@
+import { PublicKey } from "@solana/web3.js";
 import {
-  PublicKey,
-  Transaction,
-  SystemProgram,
-  Connection,
-  Keypair,
-} from "@solana/web3.js";
-import {
-  AccountLayout,
   ASSOCIATED_TOKEN_PROGRAM_ID,
-  MintLayout,
   Token,
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
