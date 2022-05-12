@@ -13,7 +13,7 @@ pub struct InitSerumMarket<'info> {
 
     #[account(mut)]
     pub option_market: Box<Account<'info, OptionMarket>>,
-
+    /// CHECK: Handled by Serum
     #[account(
         init, 
         seeds = [&option_market.key().to_bytes()[..], &pc_mint.key().to_bytes()[..], b"serumMarket"],
@@ -29,7 +29,7 @@ pub struct InitSerumMarket<'info> {
     pub rent: Sysvar<'info, Rent>,
     pub pc_mint: Box<Account<'info, Mint>>,
     pub option_mint: Box<Account<'info, Mint>>,
-
+    /// CHECK: Handled by Serum
     #[account(
         init,
         seeds = [&option_market.key().to_bytes()[..], &pc_mint.key().to_bytes()[..], b"requestQueue"],
@@ -39,16 +39,15 @@ pub struct InitSerumMarket<'info> {
         owner = *dex_program.key
     )]
     request_queue: AccountInfo<'info>,
-
+    /// CHECK: Handled by Serum
     #[account(mut)]
     pub event_queue: AccountInfo<'info>,
-
+    /// CHECK: Handled by Serum
     #[account(mut)]
     pub bids: AccountInfo<'info>,
-
+    /// CHECK: Handled by Serum
     #[account(mut)]
     pub asks: AccountInfo<'info>,
-
     #[account(
         init,
         seeds = [&option_market.key().to_bytes()[..], &pc_mint.key().to_bytes()[..], b"coinVault"],
@@ -68,7 +67,9 @@ pub struct InitSerumMarket<'info> {
         token::authority = vault_signer,
     )]
     pub pc_vault: Box<Account<'info, TokenAccount>>,
+    /// CHECK: Handled by Serum
     pub vault_signer: AccountInfo<'info>,
+    /// CHECK: Handled by Serum
     pub market_authority: AccountInfo<'info>,
 }
 
