@@ -91,7 +91,7 @@ pub struct PlaceOrder<'info> {
     pub rent: Sysvar<'info, Rent>,
 }
 
-pub fn place_order(
+pub fn handler(
     ctx: Context<PlaceOrder>,
     vault_authority_bump: u8,
     open_order_bump: u8,

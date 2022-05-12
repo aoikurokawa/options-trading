@@ -8,7 +8,6 @@ use options_trading::instructions::{ExerciseOption, MintOptionV2};
 use options_trading::state::OptionMarket;
 use solana_program::msg;
 
-
 pub mod errors;
 pub mod instructions;
 
@@ -62,5 +61,35 @@ pub mod cpi_examples {
 
     pub fn init_new_order_vault(_ctx: Context<InitNewOrderVault>) -> Result<()> {
         instructions::init_new_order_vault::handler(_ctx)
+    }
+
+    pub fn place_order(
+        ctx: Context<PlaceOrder>,
+        vault_authority_bump: u8,
+        open_order_bump: u8,
+        open_order_bump_init: u8,
+        side: NewSide,
+        limit_price: u64,
+        max_coin_qty: u64,
+        order_type: OrderType,
+        client_order_id: u64,
+        self_trade_behavior: SelfTradeBehavior,
+        limit: u16,
+        max_native_pc_qty_including_fees: u64,
+    ) -> Result<()> {
+        instructions::place_order::handler(
+            ctx,
+            vault_authority_bump,
+            open_order_bump,
+            open_order_bump_init,
+            side,
+            limit_price,
+            max_coin_qty,
+            order_type,
+            client_order_id,
+            self_trade_behavior,
+            limit,
+            max_native_pc_qty_including_fees,
+        )
     }
 }
