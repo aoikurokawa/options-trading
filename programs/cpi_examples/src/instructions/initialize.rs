@@ -4,10 +4,12 @@ use anchor_spl::token::{transfer, Token, TokenAccount, Transfer};
 
 #[derive(Accounts)]
 pub struct Initialize<'info> {
+    /// CHECK: TODO
     #[account(mut, signer)]
     pub authority: AccountInfo<'info>,
     #[account(mut)]
     pub option_source: Box<Account<'info, TokenAccount>>,
+    /// CHECK: TODO
     pub option_mint: AccountInfo<'info>,
     #[account(
         init,
@@ -18,6 +20,7 @@ pub struct Initialize<'info> {
         token::authority = vault_authority
     )]
     pub vault: Box<Account<'info, TokenAccount>>,
+    /// CHECK: TODO
     pub vault_authority: AccountInfo<'info>,
     pub token_program: Program<'info, Token>,
     pub rent: Sysvar<'info, Rent>,

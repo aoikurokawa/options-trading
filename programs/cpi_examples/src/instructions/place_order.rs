@@ -61,28 +61,38 @@ impl From<NewSide> for SerumSide {
 #[derive(Accounts)]
 pub struct PlaceOrder<'info> {
     pub user_authority: Signer<'info>,
+    /// CHECK: TODO
     pub option_trading_program: AccountInfo<'info>,
     pub dex_program: Program<'info, Dex>,
+    /// CHECK: TODO
     #[account(mut)]
     pub open_orders: AccountInfo<'info>,
+    /// CHECK: TODO
     #[account(mut)]
     pub market: AccountInfo<'info>,
+    /// CHECK: TODO
     pub market_authority: AccountInfo<'info>,
     #[account(mut)]
     pub vault: Box<Account<'info, TokenAccount>>,
+    /// CHECK: TODO
     #[account(mut)]
     pub vault_authority: AccountInfo<'info>,
-
+    /// CHECK: TODO
     #[account(mut)]
     pub request_queue: AccountInfo<'info>,
+    /// CHECK: TODO
     #[account(mut)]
     pub event_queue: AccountInfo<'info>,
+    /// CHECK: TODO
     #[account(mut)]
     pub market_bids: AccountInfo<'info>,
+    /// CHECK: TODO
     #[account(mut)]
     pub market_asks: AccountInfo<'info>,
+    /// CHECK: TODO
     #[account(mut)]
     pub coin_vault: AccountInfo<'info>,
+    /// CHECK: TODO
     #[account(mut)]
     pub pc_vault: AccountInfo<'info>,
 

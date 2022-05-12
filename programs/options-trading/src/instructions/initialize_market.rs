@@ -62,8 +62,11 @@ pub struct InitializeMarket<'info> {
         space = 8 + std::mem::size_of::<OptionMarket>() + 300
     )]
     pub option_market: Box<Account<'info, OptionMarket>>,
+    /// The V1 fee owner
+    /// CHECK: Handled
     pub fee_owner: AccountInfo<'info>,
     pub token_program: Program<'info, Token>,
+    /// CHECK: Unnecessary account, but left for backwards compatibility
     pub associated_token_program: AccountInfo<'info>,
     pub rent: Sysvar<'info, Rent>,
     pub system_program: Program<'info, System>,

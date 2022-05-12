@@ -3,6 +3,7 @@ use anchor_spl::token::{Mint, Token, TokenAccount};
 
 #[derive(Accounts)]
 pub struct InitMintVault<'info> {
+    /// CHECK: TODO
     #[account(mut, signer)]
     pub authority: AccountInfo<'info>,
     pub underlying_asset: Box<Account<'info, Mint>>,
@@ -15,6 +16,7 @@ pub struct InitMintVault<'info> {
         token::authority = vault_authority,
     )]
     pub vault: Box<Account<'info, TokenAccount>>,
+    /// CHECK: TODO
     pub vault_authority: AccountInfo<'info>,
 
     pub token_program: Program<'info, Token>,

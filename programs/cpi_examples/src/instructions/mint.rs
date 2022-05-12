@@ -5,14 +5,18 @@ use options_trading::state::OptionMarket;
 
 #[derive(Accounts)]
 pub struct MintCtx<'info> {
+    /// CHECK: TODO
     #[account(mut, signer)]
     pub authority: AccountInfo<'info>,
+    /// CHECK: TODO
     pub option_trading_program: AccountInfo<'info>,
     #[account(mut)]
     pub vault: Box<Account<'info, TokenAccount>>,
+    /// CHECK: TODO
     #[account(mut)]
     pub vault_authority: AccountInfo<'info>,
 
+    /// CHECK: TODO
     pub underlying_asset_mint: AccountInfo<'info>,
     #[account(mut)]
     pub underlying_asset_pool: Box<Account<'info, TokenAccount>>,
@@ -25,10 +29,12 @@ pub struct MintCtx<'info> {
     #[account(mut)]
     pub minted_writer_token_dest: Box<Account<'info, TokenAccount>>,
     pub option_market: Box<Account<'info, OptionMarket>>,
+    /// CHECK: TODO
     #[account(mut)]
     pub fee_owner: AccountInfo<'info>,
 
     pub token_program: Program<'info, Token>,
+    /// CHECK: TODO
     pub associated_token_program: AccountInfo<'info>,
     pub clock: Sysvar<'info, Clock>,
     pub rent: Sysvar<'info, Rent>,

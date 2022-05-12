@@ -5,9 +5,12 @@ use options_trading::state::OptionMarket;
 
 #[derive(Accounts)]
 pub struct Exercise<'info> {
+    /// CHECK: TODO
     #[account(mut, signer)]
     pub authority: AccountInfo<'info>,
+    /// CHECK: TODO
     pub option_trading_program: AccountInfo<'info>,
+    /// CHECK: TODO
     #[account(mut)]
     pub vault_authority: AccountInfo<'info>,
     option_market: Box<Account<'info, OptionMarket>>,
@@ -23,6 +26,7 @@ pub struct Exercise<'info> {
     quote_asset_pool: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
     quote_asset_src: Box<Account<'info, TokenAccount>>,
+    /// CHECK: TODO
     #[account(mut)]
     fee_owner: AccountInfo<'info>,
 

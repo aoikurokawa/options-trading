@@ -15,6 +15,7 @@ pub struct InitNewOrderVault<'info> {
         token::authority = vault_authority,
     )]
     pub vault: Box<Account<'info, TokenAccount>>,
+    /// CHECK: TODO
     pub vault_authority: AccountInfo<'info>,
     pub token_program: Program<'info, Token>,
     pub rent: Sysvar<'info, Rent>,

@@ -1,3 +1,4 @@
+use anchor_lang::InstructionData;
 use anchor_lang::prelude::*;
 use anchor_spl::token::{Mint, Token};
 use crate::errors as CpiExampleErrors;
@@ -6,23 +7,31 @@ use crate::errors as CpiExampleErrors;
 pub struct InitOptionMarket<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
+    /// CHECK: TODO
     pub options_trading_program: AccountInfo<'info>,
     pub underlying_asset_mint: Box<Account<'info, Mint>>,
     pub quote_asset_mint: Box<Account<'info, Mint>>,
 
+    /// CHECK: TODO
     #[account(mut)]
     pub option_mint: AccountInfo<'info>,
+    /// CHECK: TODO
     #[account(mut)]
     pub writer_token_mint: AccountInfo<'info>,
+    /// CHECK: TODO
     #[account(mut)]
     pub quote_asset_pool: AccountInfo<'info>,
+    /// CHECK: TODO
     #[account(mut)]
     pub underlying_asset_pool: AccountInfo<'info>,
+    /// CHECK: TODO
     #[account(mut)]
     pub option_market: AccountInfo<'info>,
+    /// CHECK: TODO
     pub fee_owner: AccountInfo<'info>,
 
     pub token_program: Program<'info, Token>,
+    /// CHECK: TODO
     pub associated_token_program: AccountInfo<'info>,
     pub rent: Sysvar<'info, Rent>,
     pub system_program: Program<'info, System>,
