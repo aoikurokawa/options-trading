@@ -26,10 +26,11 @@
   },
   "dependencies": {
     "@project-serum/anchor": "^0.24.2",
-    "@solana/spl-token": "^0.2.0",
+    "@solana/spl-token": "0.1.5",
     "@solana/web3.js": "^1.41.6",
     "bignumber.js": "^9.0.2",
     "buffer-layout": "^1.2.2",
     "rollup": "^2.72.1"
-  }
+  },
+  "peerDependencies": {}
 }
