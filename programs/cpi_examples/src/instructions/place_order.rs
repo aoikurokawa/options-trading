@@ -5,6 +5,7 @@ use anchor_spl::dex::serum_dex::{
 };
 use anchor_spl::dex::*;
 use anchor_spl::token::*;
+use std::num::NonZeroU64;
 
 use crate::errors as CpiExampleErrors;
 
@@ -100,7 +101,7 @@ pub fn place_order(
     max_coin_qty: u64,
     order_type: OrderType,
     client_order_id: u64,
-    self_trade_bahavior: SelfTradeBehavior,
+    self_trade_behavior: SelfTradeBehavior,
     limit: u16,
     max_native_pc_qty_including_fees: u64,
 ) -> Result<()> {
@@ -173,5 +174,65 @@ pub fn place_order(
             &[vault_authority_seeds],
         )?;
     }
+
+    let mut new_order_ix = serum_dex::instruction::new_order(
+        ctx.accounts.market.key,
+        ctx.accounts.open_orders.key,
+        ctx.accounts.request_queue.key,
+        ctx.accounts.event_queue.key,
+        ctx.accounts.market_bids.key,
+        ctx.accounts.market_asks.key,
+        &ctx.accounts.vault.key(),
+        ctx.accounts.vault_authority.key,
+        ctx.accounts.coin_vault.key,
+        ctx.accounts.pc_vault.key,
+        ctx.accounts.token_program.key,
+        &ctx.accounts.rent.key(),
+        None,
+        ctx.accounts.dex_program.key,
+        side.into(),
+        NonZeroU64::new(limit_price).unwrap(),
+        NonZeroU64::new(max_coin_qty).unwrap(),
+        order_type.into(),
+        client_order_id,
+        self_trade_behavior.into(),
+        limit,
+        NonZeroU64::new(max_native_pc_qty_including_fees).unwrap(),
+    )
+    .map_err(|_x| CpiExampleErrors::ErrorCode::DexIxError)?;
+    new_order_ix.program_id = *cpi_program.key;
+    new_order_ix.data.insert(0, 1 as u8);
+    new_order_ix.data.insert(0, 1 as u8);
+    new_order_ix.accounts.insert(
+        0,
+        ctx.accounts.dex_program.to_account_metas(Some(false))[0].clone(),
+    );
+
+    let vault_key = ctx.accounts.vault.key();
+    let vault_authority_seeds = &[
+        vault_key.as_ref(),
+        b"vaultAuthority",
+        &[vault_authority_bump],
+    ];
+
+    solana_program::program::invoke_signed(
+        &new_order_ix,
+        &[
+            ctx.accounts.market.to_account_info(),
+            ctx.accounts.open_orders.to_account_info(),
+            ctx.accounts.request_queue.to_account_info(),
+            ctx.accounts.event_queue.to_account_info(),
+            ctx.accounts.market_bids.to_account_info(),
+            ctx.accounts.market_asks.to_account_info(),
+            ctx.accounts.vault.to_account_info(),
+            ctx.accounts.vault_authority.to_account_info(),
+            ctx.accounts.coin_vault.to_account_info(),
+            ctx.accounts.pc_vault.to_account_info(),
+            ctx.accounts.token_program.to_account_info(),
+            ctx.accounts.rent.to_account_info(),
+        ],
+        &[vault_authority_seeds],
+    )?;
+
     Ok(())
 }
