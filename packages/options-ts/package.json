@@ -1,0 +1,24 @@
+{
+  "name": "options-ts",
+  "version": "1.0.0",
+  "description": "solana program instruction",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "build:package": "rollup -c",
+    "lint": "eslint -c .eslintrc.json --fix",
+    "prepublishOnly": "rollup -c",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "type-ckeck": "tsc --noEmit",
+    "copy-idl": "test -e ../../target/types/options_trading.ts && cp ../../target/types/options_trading.ts ./src || echo \"Run anchor build first\" >&2"
+  },
+  "devDependencies": {
+    "typescript": "^4.6.4"
+  }
+}
