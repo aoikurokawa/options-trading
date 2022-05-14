@@ -2,7 +2,7 @@ import * as anchor from "@project-serum/anchor";
 import assert from "assert";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
-  TokenAccountNotFoundError,
+  Token,
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import {
@@ -13,4 +13,5 @@ import {
   SYSVAR_RENT_PUBKEY,
   TransactionInstruction,
 } from "@solana/web3.js";
-import {Option}
+import { OptionMarketV2 } from "../../packages/options-ts/src/types";
+import {initStep} from "../../utils"
