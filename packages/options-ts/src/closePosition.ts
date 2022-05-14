@@ -7,7 +7,7 @@ import {
   TransactionInstruction,
 } from "@solana/web3.js";
 import { BN } from "@project-serum/anchor";
-import { struct } from "@solana/buffer-layout";
+import { struct } from "buffer-layout";
 import { u64 } from "@solana/buffer-layout-utils";
 import { INTRUCTION_TAG_LAYOUT, uint64 } from "./layout";
 import { TOKEN_PROGRAM_ID } from "./utils";
