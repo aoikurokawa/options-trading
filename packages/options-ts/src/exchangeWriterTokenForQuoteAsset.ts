@@ -7,11 +7,11 @@ import {
   TransactionInstruction,
 } from "@solana/web3.js";
 import { BN } from "@project-serum/anchor";
-import { struct } from "@solana/buffer-layout";
+import { struct } from "buffer-layout";
 import { INTRUCTION_TAG_LAYOUT, uint64 } from "./layout";
 import { TOKEN_PROGRAM_ID } from "./utils";
 
-export const EXCHANGE_WRITER_TOKEN_FOR_QUOTE = struct(uint64("size"));
+export const EXCHANGE_WRITER_TOKEN_FOR_QUOTE = struct([uint64("size")]);
 
 /**
  * Generate the instruction for 'ExchangeWriterTokenForQuote'

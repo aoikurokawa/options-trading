@@ -16,7 +16,7 @@ import { INTRUCTION_TAG_LAYOUT, uint64 } from "./layout";
 import { TOKEN_PROGRAM_ID } from "./utils";
 import { getOptionMarketData } from "./utils/getOptionMarketData";
 
-export const EXERCISE_COVERED_CALL_LAYOUT = struct(uint64("size"));
+export const EXERCISE_COVERED_CALL_LAYOUT = struct([uint64("size")]);
 
 /**
  * Generate the instruction for 'ExerciseCoveredCall'.
