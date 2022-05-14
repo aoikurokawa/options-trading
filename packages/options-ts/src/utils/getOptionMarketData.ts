@@ -13,5 +13,5 @@ export const getOptionMarketData = async ({
   optionMarketKey: PublicKey;
 }): Promise<OptionMarket> => {
   const info = await connection.getAccountInfo(optionMarketKey);
-  return OPTION_MARKET_LAYOUT.decode(info?.data) as OptionMarket;
+  return OPTION_MARKET_LAYOUT.decode(info!.data) as OptionMarket;
 };
