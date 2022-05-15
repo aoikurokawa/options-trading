@@ -409,7 +409,7 @@ export const initSetup = async (
     opts.quoteAmountPerContract || new anchor.BN("50000000000");
   let expiration =
     opts.expiration || new anchor.BN(new Date().getTime() / 1000 + 3600);
-  let optionMarketkey: PublicKey;
+  let optionMarketKey: PublicKey;
   let bumpSeed: number;
   let mintFeeKey = new Keypair().publicKey;
   let exerciseFeeKey = new Keypair().publicKey;
@@ -420,7 +420,7 @@ export const initSetup = async (
     payer,
     mintAuthority
   ));
-  [optionMarketkey, bumpSeed] = await anchor.web3.PublicKey.findProgramAddress(
+  [optionMarketKey, bumpSeed] = await anchor.web3.PublicKey.findProgramAddress(
     [
       underlyingToken.publicKey.toBuffer(),
       quoteToken.publicKey.toBuffer(),
@@ -433,25 +433,25 @@ export const initSetup = async (
 
   const [optionMintKey, optionMintBump] =
     await anchor.web3.PublicKey.findProgramAddress(
-      [optionMarketkey.toBuffer(), textEncoder.encode("optionToken")],
+      [optionMarketKey.toBuffer(), textEncoder.encode("optionToken")],
       program.programId
     );
 
   const [writeMintKey, writerMintBump] =
     await anchor.web3.PublicKey.findProgramAddress(
-      [optionMarketkey.toBuffer(), textEncoder.encode("writerToken")],
+      [optionMarketKey.toBuffer(), textEncoder.encode("writerToken")],
       program.programId
     );
 
   const [quoteAssetPoolKey, quoteAssetPoolBump] =
     await anchor.web3.PublicKey.findProgramAddress(
-      [optionMarketkey.toBuffer(), textEncoder.encode("quoteAssetPool")],
+      [optionMarketKey.toBuffer(), textEncoder.encode("quoteAssetPool")],
       program.programId
     );
 
   const [underlyingAssetPoolKey, underlyingAssetPoolBump] =
     await anchor.web3.PublicKey.findProgramAddress(
-      [optionMarketkey.toBuffer(), textEncoder.encode("underlyingAssetPool")],
+      [optionMarketKey.toBuffer(), textEncoder.encode("underlyingAssetPool")],
       program.programId
     );
 
@@ -506,7 +506,7 @@ export const initSetup = async (
   }
 
   const optionMarket: OptionMarketV2 = {
-    key: optionMarketkey,
+    key: optionMarketKey,
     optionMint: optionMintKey,
     writerTokenMint: writeMintKey,
     underlyingAssetMint: underlyingToken.publicKey,
@@ -536,7 +536,7 @@ export const initSetup = async (
     underlyingAmountPerContract,
     quoteAmountPerContract,
     expiration,
-    optionMarketkey,
+    optionMarketKey,
     bumpSeed,
     mintFeeKey,
     exerciseFeeKey,
@@ -582,7 +582,7 @@ export const initOptionMarket = async (
     })
     .remainingAccounts(remainingAccounts)
     .signers([payer])
-    .instruction()
+    .postInstructions(instructions)
     .rpc();
 };
 
