@@ -101,5 +101,26 @@ describe("cpi_examples initOptionMarket", () => {
       onChainOptionMarket.quoteAssetMint?.toString(),
       quoteToken.publicKey.toString()
     );
+
+    assert.equal(
+      onChainOptionMarket.underlyingAssetPool?.toString(),
+      optionMarket.underlyingAssetPool.toString()
+    );
+    assert.equal(
+      onChainOptionMarket.quoteAssetPool?.toString(),
+      optionMarket.quoteAssetPool.toString()
+    );
+    assert.equal(
+      onChainOptionMarket.mintFeeAccount?.toString(),
+      optionMarket.mintFeeAccount?.toString()
+    );
+    assert.equal(
+      onChainOptionMarket.exerciseFeeAccount?.toString(),
+      optionMarket.exerciseFeeAccount?.toString()
+    );
+    assert.equal(
+      onChainOptionMarket.expired?.toString(),
+      optionMarket.expired?.toString()
+    );
   });
 });
