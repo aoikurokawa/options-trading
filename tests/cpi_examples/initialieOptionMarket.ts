@@ -86,5 +86,20 @@ describe("cpi_examples initOptionMarket", () => {
       console.error(err);
       throw err;
     }
+
+    const onChainOptionMarket =
+      (await optionsProgram.account.optionMarket.fetch(
+        optionMarket.key
+      )) as OptionMarketV2;
+
+    assert.equal(
+      onChainOptionMarket.underlyingAssetMint?.toString(),
+      underlyingToken.publicKey.toString()
+    );
+
+    assert.equal(
+      onChainOptionMarket.quoteAssetMint?.toString(),
+      quoteToken.publicKey.toString()
+    );
   });
 });
