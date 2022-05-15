@@ -1,17 +1,8 @@
 use anchor_lang::prelude::*;
-use anchor_lang::InstructionData;
-use anchor_spl::dex::serum_dex;
-
-use anchor_spl::dex::Dex;
-use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
-use options_trading::instructions::{ExerciseOption, MintOptionV2};
-use options_trading::state::OptionMarket;
-use solana_program::msg;
 
 pub mod errors;
 pub mod instructions;
 
-use errors as CpiExampleErrors;
 use instructions::*;
 
 declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
