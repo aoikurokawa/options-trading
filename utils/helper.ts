@@ -585,3 +585,135 @@ export const initOptionMarket = async (
     .instruction()
     .rpc();
 };
+
+/**
+ *
+ * @param program
+ * @param size = The amount of option tokens to burn and exercise
+ * @param optionMarket - The OptionMarket to exercise on
+ * @param optionTokenkey - The key for the OptionToken
+ * @param exerciser - The signer that is the exerciser
+ * @param exerciserOptionTokenSrc - The publickey for the exerciser's OptionToken account for optionMarket
+ * @param underlyingAssetPoolKey - The publickey for the OptionMarket's underlying asset pool
+ * @param underlyingAssetDestKey - The publickey of the exerciser's underlying asset account
+ * @param quoteAssetPoolKey - The publickey of the OptionMarket's quote asset pool
+ * @param quoteAssetSrcKey - The publickey of the exerciser's quote asset pool
+ * @param opts - override options, usually used for testing
+ * @param remainingAccounts
+ */
+export const exerciseOptionTx = async (
+  program: anchor.Program<OptionsTrading>,
+  size: anchor.BN,
+  optionMarket: PublicKey,
+  optionTokenKey: PublicKey,
+  exerciser: Keypair,
+  optionAuthority: Keypair,
+  exerciseOptionTokenSrc: PublicKey,
+  underlyingAssetPoolKey: PublicKey,
+  underlyingAssetDestKey: PublicKey,
+  quoteAssetPoolKey: PublicKey,
+  quoteAssetSrcKey: PublicKey,
+  remainingAccounts: AccountMeta[],
+  opts: { feeOwner?: PublicKey } = {}
+) => {
+  await program.methods
+    .exerciseOption(size)
+    .accounts({
+      userAuthority: exerciser.publicKey,
+      optionAuthority: optionAuthority.publicKey,
+      optionMarket,
+      optionMint: optionTokenKey,
+      exerciserOptionTokenSrc: exerciseOptionTokenSrc,
+      underlyingAssetPool: underlyingAssetPoolKey,
+      underlyingAssetDest: underlyingAssetDestKey,
+      quoteAssetPool: quoteAssetPoolKey,
+      quoteAssetSrc: quoteAssetSrcKey,
+      feeOwner: opts.feeOwner || FEE_OWNER_KEY,
+      tokenProgram: TOKEN_PROGRAM_ID,
+      systemProgram: SystemProgram.programId,
+      clock: SYSVAR_CLOCK_PUBKEY,
+    })
+    .remainingAccounts(remainingAccounts)
+    .signers([exerciser])
+    .rpc();
+};
+
+export const closePostExpiration = async (
+  program: Program<OptionsTrading>,
+  optionHolder: Keypair,
+  size: anchor.BN,
+  optionMarket: PublicKey,
+  writerTokenMint: PublicKey,
+  writerTokenSrc: PublicKey,
+  underlyingAssetPool: PublicKey,
+  underlyingAssetDest: PublicKey
+) => {
+  await program.methods
+    .closePostExpiration(size)
+    .accounts({
+      userAuthority: optionHolder.publicKey,
+      optionMarket,
+      writerTokenMint,
+      writerTokenSrc,
+      underlyingAssetPool,
+      underlyingAssetDest,
+      tokenProgram: TOKEN_PROGRAM_ID,
+      clock: SYSVAR_CLOCK_PUBKEY,
+    })
+    .signers([optionHolder])
+    .rpc();
+};
+
+export const closeOptionPosition = async (
+  program: Program<OptionsTrading>,
+  minter: Keypair,
+  size: anchor.BN,
+  optionMarket: PublicKey,
+  writerTokenMint: PublicKey,
+  writerTokenSrc: PublicKey,
+  optionTokenMint: PublicKey,
+  optionTokenSrc: PublicKey,
+  underlyingAssetPool: PublicKey,
+  underlyingAssetDest: PublicKey
+) => {
+  await program.methods
+    .closeOptionPosition(size)
+    .accounts({
+      userAuthority: minter.publicKey,
+      optionMarket,
+      writerTokenMint,
+      writerTokenSrc,
+      optionTokenMint,
+      optionTokenSrc,
+      underlyingAssetPool,
+      underlyingAssetDest,
+      tokenProgram: TOKEN_PROGRAM_ID,
+    })
+    .signers([minter])
+    .rpc();
+};
+
+export const burnWriteForQuote = async (
+  program: Program<OptionsTrading>,
+  writer: Keypair,
+  size: anchor.BN,
+  optionMarket: PublicKey,
+  writerTokenMint: PublicKey,
+  writerTokenSrc: PublicKey,
+  quoteAssetPool: PublicKey,
+  writerQuoteDest: PublicKey
+) => {
+  await program.methods
+    .burnWriterForQuote(size)
+    .accounts({
+      userAuthority: writer.publicKey,
+      optionMarket,
+      writerTokenMint,
+      writerTokenSrc,
+      quoteAssetPool,
+      writerQuoteDest,
+      tokenProgram: TOKEN_PROGRAM_ID,
+    })
+    .signers([writer])
+    .rpc();
+};
